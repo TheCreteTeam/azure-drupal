@@ -1,0 +1,42 @@
+server:
+  port: 8083
+logging:
+  level:
+    root: INFO
+    com.demosso.authorizationserver: DEBUG
+    org.springframework.jdbc: DEBUG
+    org.springframework.security: TRACE
+spring:
+  application:
+    name: AuthServer
+  security:
+#    saml2:
+#      relyingparty:
+#        registration:
+#          myrp:
+#            signing:
+#              credentials:
+#                - private-key-location: classpath:cert/rp-key.key
+#                  certificate-location: classpath:cert/rp-certificate.crt
+#            singlelogout:
+#              binding: POST
+#              response-url: http://localhost:8083/saml/logout
+#            assertingparty:
+#              metadata-uri: http://localhost:8180/realms/myrealm/protocol/saml/descriptor
+
+    oauth2:
+      client:
+        provider:
+          keycloak:
+#            issuer-uri: http://localhost:8180/realms/myrealm
+            issuer-uri: http://host.docker.internal:8180/realms/myrealm
+        registration:
+          myregistration:
+            provider: keycloak
+            redirect-uri: http://localhost:8083/login/oauth2/code/myregistration
+            client-id: login-app
+            client-secret: a3gJ33OmpfgURj8z3wuKgsulRQEUYNdE
+#            client-secret: MFrqh68yvUrYYfhC0BIr6qDaQf6B54q7
+            authorization-grant-type: authorization_code
+            scope:
+              - openid

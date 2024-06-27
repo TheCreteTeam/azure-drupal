@@ -1,46 +1,88 @@
 version: '3.1'
 services:
-  drupal:
-    image: drupal:10-apache
-    container_name: drupal_c
+#  drupal:
+#    image: drupal:10-apache
+#    container_name: drupal_c
+#    ports:
+#      - 35020:80
+#    environment:
+#      MYSQL_DATABASE: drupal_db
+#      MYSQL_USER: admin
+#      MYSQL_PASSWORD: tmp_password
+#      MYSQL_HOST: postgres
+#    volumes:
+#      - ./drupal/drupal-modules:/var/www/html/modules
+#      - ./drupal/drupal-profiles:/var/www/html/profiles
+#      - ./drupal/drupal-sites:/var/www/html/sites
+#      - ./drupal/drupal-themes:/var/www/html/themes
+#      - ./drupal/config:/var/www/html/sites/default
+#    depends_on:
+#      - postgres
+#    networks:
+#      - drupal
+#
+#  postgres:
+#    image: postgres:16
+#    container_name: postgres_c
+#    ports:
+#      - 35022:5432
+#    environment:
+#      POSTGRES_DB: drupal_db
+#      POSTGRES_USER: admin
+#      POSTGRES_PASSWORD: tmp_password
+#    volumes:
+#      - ./drupal/DB/db-data:/var/lib/postgresql/data
+#    networks:
+#      - drupal
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
     ports:
-      - 35020:80
+      - "8180:8180"
     environment:
-      MYSQL_DATABASE: drupal_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: tmp_password
-      MYSQL_HOST: postgres
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+    command:
+      - start-dev
+      - --http-port=8180
+      - --import-realm
     volumes:
-      - ./drupal/drupal-modules:/var/www/html/modules
-      - ./drupal/drupal-profiles:/var/www/html/profiles
-      - ./drupal/drupal-sites:/var/www/html/sites
-      - ./drupal/drupal-themes:/var/www/html/themes
-      - ./drupal/config:/var/www/html/sites/default
-    depends_on:
-      - postgres
+      - ./realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
     networks:
-      - drupal
+      - keycloak-net
 
-  postgres:
-    image: postgres:16
-    container_name: postgres_c
+  authserver:
+    container_name: authserver
+    build:
+      context: AuthServer
+      dockerfile: Dockerfile
     ports:
-      - 35022:5432
-    environment:
-      POSTGRES_DB: drupal_db
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: tmp_password
-    volumes:
-      - ./drupal/DB/db-data:/var/lib/postgresql/data
+      - "8083:8083"
+    depends_on:
+      - keycloak
+    restart: on-failure
     networks:
-      - drupal
+      - keycloak-net
+
+
+  nexus:
+    container_name: nexus
+    image: sonatype/nexus3
+    ports:
+      - 8095:8081
+    volumes:
+      - ./DB/nexus-data:/nexus-data
+    networks:
+      - keycloak-net
 
 networks:
-  drupal:
-
-volumes:
-  drupal-modules:
-  drupal-profiles:
-  drupal-sites:
-  drupal-themes:
-  db-data:
+  keycloak-net: { }
+#networks:
+#  drupal:
+#
+#volumes:
+#  drupal-modules:
+#  drupal-profiles:
+#  drupal-sites:
+#  drupal-themes:
+#  db-data:
