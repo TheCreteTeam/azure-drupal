@@ -11,11 +11,11 @@ services:
       MYSQL_PASSWORD: tmp_password
       MYSQL_HOST: postgres
     volumes:
-      - ./drupal-modules:/var/www/html/modules
-      - ./drupal-profiles:/var/www/html/profiles
-      - ./drupal-sites:/var/www/html/sites
-      - ./drupal-themes:/var/www/html/themes
-      - ./config:/var/www/html/sites/default
+      - ./drupal/drupal-modules:/var/www/html/modules
+      - ./drupal/drupal-profiles:/var/www/html/profiles
+      - ./drupal/drupal-sites:/var/www/html/sites
+      - ./drupal/drupal-themes:/var/www/html/themes
+      - ./drupal/config:/var/www/html/sites/default
     depends_on:
       - postgres
     networks:
@@ -31,7 +31,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: tmp_password
     volumes:
-      - ./DB/db-data:/var/lib/postgresql/data
+      - ./drupal/DB/db-data:/var/lib/postgresql/data
     networks:
       - drupal
 
