@@ -1,39 +1,39 @@
 version: '3.1'
 services:
-#  drupal:
-#    image: drupal:10-apache
-#    container_name: drupal_c
-#    ports:
-#      - 35020:80
-#    environment:
-#      MYSQL_DATABASE: drupal_db
-#      MYSQL_USER: admin
-#      MYSQL_PASSWORD: tmp_password
-#      MYSQL_HOST: postgres
-#    volumes:
-#      - ./drupal/drupal-modules:/var/www/html/modules
-#      - ./drupal/drupal-profiles:/var/www/html/profiles
-#      - ./drupal/drupal-sites:/var/www/html/sites
-#      - ./drupal/drupal-themes:/var/www/html/themes
-#      - ./drupal/config:/var/www/html/sites/default
-#    depends_on:
-#      - postgres
-#    networks:
-#      - drupal
-#
-#  postgres:
-#    image: postgres:16
-#    container_name: postgres_c
-#    ports:
-#      - 35022:5432
-#    environment:
-#      POSTGRES_DB: drupal_db
-#      POSTGRES_USER: admin
-#      POSTGRES_PASSWORD: tmp_password
-#    volumes:
-#      - ./drupal/DB/db-data:/var/lib/postgresql/data
-#    networks:
-#      - drupal
+  drupal:
+    image: drupal:10-apache
+    container_name: drupal_c
+    ports:
+      - 35020:80
+    environment:
+      MYSQL_DATABASE: drupal_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: tmp_password
+      MYSQL_HOST: postgres
+    volumes:
+      - ./drupal/drupal-modules:/var/www/html/modules
+      - ./drupal/drupal-profiles:/var/www/html/profiles
+      - ./drupal/drupal-sites:/var/www/html/sites
+      - ./drupal/drupal-themes:/var/www/html/themes
+      - ./drupal/config:/var/www/html/sites/default
+    depends_on:
+      - postgres
+    networks:
+      - drupal
+
+  postgres:
+    image: postgres:16
+    container_name: postgres_c
+    ports:
+      - 35022:5432
+    environment:
+      POSTGRES_DB: drupal_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: tmp_password
+    volumes:
+      - ./drupal/DB/db-data:/var/lib/postgresql/data
+    networks:
+      - drupal
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
@@ -76,13 +76,12 @@ services:
       - keycloak-net
 
 networks:
+  drupal:
   keycloak-net: { }
-#networks:
-#  drupal:
-#
-#volumes:
-#  drupal-modules:
-#  drupal-profiles:
-#  drupal-sites:
-#  drupal-themes:
-#  db-data:
+
+volumes:
+  drupal-modules:
+  drupal-profiles:
+  drupal-sites:
+  drupal-themes:
+  db-data:
