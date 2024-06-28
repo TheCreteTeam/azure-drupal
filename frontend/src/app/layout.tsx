@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
 import React from "react";
+// import SessionGuard from "@/app/components/SessionGuard";
+// import {Providers} from "@/app/components/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
