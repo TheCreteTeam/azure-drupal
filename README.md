@@ -44,3 +44,20 @@ openssl rand -base64 32
 ```
 
 Then navigate to http://localhost:3000/ in your browser.
+
+
+# NEXUS
+Nexus can cache maven repositories for faster docker builds.
+## Setup - Auth Server requirement only
+Nexus caches by default the official maven repo. 
+In order to use Nexus with other repos eg. spring snapshots, you need to create additional repositories in the Nexus UI.
+The nexus login password is created on the first run in the path DB/nexus-data/admin.password
+Login as admin and add the following repositories with the same settings as maven-central:
+(Create repository->maven2(proxy) add a name and url)
+- https://repo.spring.io/milestone
+- https://repo.spring.io/snapshot
+
+Important: For the 'Version Policy' you should select 'Mixed' to allow lib snapshot versions.
+After creating the new repos Add the repositories to the default 'maven-public' group.
+## Nexus usage in Dockerfiles
+In docker build configurations --build-arg USE_NEXUS=TRUE enables the use of the local nexus.
