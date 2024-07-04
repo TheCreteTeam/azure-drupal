@@ -1,25 +1,48 @@
 version: '3.1'
 services:
   drupal:
-    image: drupal:10-apache
-    container_name: drupal_c
+#    image: drupal:10-apache
+    build:
+      context: drupal
+      dockerfile: Dockerfile
+    container_name: drupal-poc
     ports:
       - 35020:80
     environment:
-      MYSQL_DATABASE: drupal_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: tmp_password
-      MYSQL_HOST: postgres
+      DB_USERNAME: sa
+      DB_DATABASE: drupal
+      DB_PASSWORD: Jijikos1
+      DB_HOST: host.docker.internal
+      DB_PORT: 1433
+      DB_NAME: drupal
+      DB_TABLE_PREFIX: 'dr_'
     volumes:
-      - ./drupal/drupal-modules:/var/www/html/modules
+      # Path /drupal/shared used for file copies and tests
+      - ./drupal/shared:/shared
       - ./drupal/drupal-profiles:/var/www/html/profiles
-      - ./drupal/drupal-sites:/var/www/html/sites
       - ./drupal/drupal-themes:/var/www/html/themes
-      - ./drupal/config:/var/www/html/sites/default
+    #  warning: the below break initial setup, recheck if going to enable them
+    # - ./drupal/drupal-modules:/var/www/html/modules
+    # - ./drupal/drupal-sites:/var/www/html/sites
+    # - ./drupal/config:/var/www/html/sites/default
     depends_on:
       - postgres
     networks:
       - drupal
+
+  sqlserver:
+    image: 'mcr.microsoft.com/mssql/server:latest'
+    container_name: sqlserver
+    environment:
+      - 'ACCEPT_EULA=yes'
+#      - 'MSSQL_PID=express'
+      - 'MSSQL_SA_PASSWORD=Jijikos1'
+    ports:
+      - '1433:1433'
+    volumes:
+      - ./DB/mssql/data:/var/opt/mssql/data
+      - ./DB/mssql/log:/var/opt/mssql/log
+      - ./DB/mssql/secrets:/var/opt/mssql/secrets
 
   postgres:
     image: postgres:16
@@ -60,10 +83,10 @@ services:
       - "8083:8083"
     depends_on:
       - keycloak
+      - nexus
     restart: on-failure
     networks:
       - keycloak-net
-
 
   nexus:
     container_name: nexus
