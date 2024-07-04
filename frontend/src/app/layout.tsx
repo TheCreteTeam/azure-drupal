@@ -3,8 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
 import React from "react";
-// import SessionGuard from "@/app/components/SessionGuard";
-// import {Providers} from "@/app/components/Providers";
+import {Providers} from "@/app/components/Providers";
+import SessionGuard from "@/app/components/SessionGuard";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,8 +21,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
-        {children}</body>
+        <Providers>
+          <SessionGuard>
+            <Navbar />
+            {children}
+          </SessionGuard>
+        </Providers>
+      </body>
     </html>
   );
 }
