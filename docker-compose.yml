@@ -26,9 +26,7 @@ services:
     # - ./drupal/drupal-sites:/var/www/html/sites
     # - ./drupal/config:/var/www/html/sites/default
     depends_on:
-      - postgres
-    networks:
-      - drupal
+      - sqlserver
 
   sqlserver:
     image: 'mcr.microsoft.com/mssql/server:latest'
@@ -55,8 +53,6 @@ services:
       POSTGRES_PASSWORD: tmp_password
     volumes:
       - ./drupal/DB/db-data:/var/lib/postgresql/data
-    networks:
-      - drupal
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
@@ -71,8 +67,6 @@ services:
       - --import-realm
     volumes:
       - ./realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
-    networks:
-      - keycloak-net
 
   authserver:
     container_name: authserver
@@ -85,8 +79,6 @@ services:
       - keycloak
       - nexus
     restart: on-failure
-    networks:
-      - keycloak-net
 
   nexus:
     container_name: nexus
@@ -97,10 +89,6 @@ services:
       - ./DB/nexus-data:/nexus-data
     networks:
       - keycloak-net
-
-networks:
-  drupal:
-  keycloak-net: { }
 
 volumes:
   drupal-modules:
