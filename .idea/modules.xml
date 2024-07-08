@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/azure-drupal.iml" filepath="$PROJECT_DIR$/.idea/azure-drupal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/esap-backend/esap-backend.iml" filepath="$PROJECT_DIR$/esap-backend/esap-backend.iml" />
     </modules>
   </component>
 </project>

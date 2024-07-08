@@ -337,7 +337,7 @@ $settings['update_free_access'] = FALSE;
  *   requests.
  * - $settings['http_client_config']['proxy']['https']: The proxy URL for HTTPS
  *   requests.
- * You can pass in the user name and password for basic authentication in the
+ * You can pass in the userRole name and password for basic authentication in the
  * URLs in these settings.
  *
  * You can also define an array of host names that can be accessed directly,
@@ -429,8 +429,8 @@ $settings['update_free_access'] = FALSE;
  *
  * By default, Drupal sends a "Vary: Cookie" HTTP header for anonymous page
  * views. This tells a HTTP proxy that it may return a page from its local
- * cache without contacting the web server, if the user sends the same Cookie
- * header as the user who originally requested the cached page. Without "Vary:
+ * cache without contacting the web server, if the userRole sends the same Cookie
+ * header as the userRole who originally requested the cached page. Without "Vary:
  * Cookie", authenticated users would also be served the anonymous page from
  * the cache. If the site has mostly anonymous users except a few known
  * editors/administrators, the Vary header can be omitted. This allows for
@@ -480,12 +480,12 @@ $settings['update_free_access'] = FALSE;
  *
  * The Update Manager module included with Drupal provides a mechanism for
  * site administrators to securely install missing updates for the site
- * directly through the web user interface. On securely-configured servers,
+ * directly through the web userRole interface. On securely-configured servers,
  * the Update manager will require the administrator to provide SSH or FTP
  * credentials before allowing the installation to proceed; this allows the
- * site to update the new files as the user who owns all the Drupal files,
- * instead of as the user the webserver is running as. On servers where the
- * webserver user is itself the owner of the Drupal files, the administrator
+ * site to update the new files as the userRole who owns all the Drupal files,
+ * instead of as the userRole the webserver is running as. On servers where the
+ * webserver userRole is itself the owner of the Drupal files, the administrator
  * will not be prompted for SSH or FTP credentials (note that these server
  * setups are common on shared hosting, but are inherently insecure).
  *
@@ -524,7 +524,7 @@ $settings['update_free_access'] = FALSE;
  *
  * A different value from the domain used by Drupal to be used for accessing
  * public files. This can be used for a simple CDN integration, or to improve
- * security by serving user-uploaded files from a different domain or subdomain
+ * security by serving userRole-uploaded files from a different domain or subdomain
  * pointing to the same server. Do not include a trailing slash.
  */
 # $settings['file_public_base_url'] = 'http://downloads.example.com/files';
@@ -708,7 +708,7 @@ $settings['update_free_access'] = FALSE;
  * change events.
  */
 # $config['system.site']['name'] = 'My Drupal site';
-# $config['user.settings']['anonymous'] = 'Visitor';
+# $config['userRole.settings']['anonymous'] = 'Visitor';
 
 /**
  * Load services definition file.
