@@ -1,0 +1,7 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+    <changeSet id="UserRoles-table-creation" author="admin">
+        <sqlFile encoding="utf8" path="src/main/resources/liquibase/0.0/update-00-01.sql"/>
+    </changeSet>
+</databaseChangeLog>
