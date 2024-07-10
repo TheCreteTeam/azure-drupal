@@ -29,6 +29,7 @@ RUN docker-php-ext-enable sqlsrv pdo_sqlsrv
 # Install Drupal driver for SQL Server
 WORKDIR /opt/drupal
 RUN composer require 'drupal/sqlsrv:^4.4'
+RUN composer require 'drupal/restui:^1.21'
 
 # Fix Drupal driver for SQL Server issues: https://www.drupal.org/project/sqlsrv/issues/3456815
 COPY build/changes/Schema.php /opt/drupal/web/modules/contrib/sqlsrv/src/Driver/Database/sqlsrv/Schema.php
