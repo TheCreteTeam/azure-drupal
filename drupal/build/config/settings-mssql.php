@@ -58,4 +58,4 @@ $settings['config_sync_directory'] = 'sites/default/files/config_WxI8vmxYs9Pqmee
  */
 $settings['hash_salt'] = 'O_mBsJWj88kbvJ0m5V3W6GnNYDg8rIaPPgBRJjT-UDMB4ubbe5x1ZX4ETOaRnk7c3z8NVVO3ew';
 
-
+$config['system.site']['uuid'] = '3153272e-4a62-4b66-95bf-e4cb117bf38b';

@@ -36,6 +36,11 @@ COPY build/changes/Schema.php /opt/drupal/web/modules/contrib/sqlsrv/src/Driver/
 COPY build/changes/Select.php /opt/drupal/web/modules/contrib/sqlsrv/src/Driver/Database/sqlsrv/Select.php
 COPY build/changes/Install/Tasks.php /opt/drupal/web/modules/contrib/sqlsrv/src/Driver/Database/sqlsrv/Install/Tasks.php
 
+# Admin status report fixes
+RUN mkdir -p /var/www/html/sites/default/files/config_WxI8vmxYs9PqmeenmJT9W4FOaGlM4B-6Ytl0htct0-INmEDl-Q0YE9KAPzJNiJHd1m09Tsxi7A/sync
+RUN mkdir -p /var/www/html/sites/default/files
+# make writable
+RUN chmod -R 777 /var/www/html/sites/default/files
 # Add drupal configuration for mssql via env vars
 COPY build/config/settings-mssql.php /var/www/html/sites/default/settings.php
 RUN chmod 777 /var/www/html/sites/default/settings.php
