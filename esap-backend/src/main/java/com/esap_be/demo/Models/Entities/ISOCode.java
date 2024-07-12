@@ -1,23 +1,23 @@
 package com.esap_be.demo.Models.Entities;
 
-import org.springframework.data.annotation.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-import java.util.Date;
+import java.util.List;
 
-@RedisHash("DataSet")
+@RedisHash("ISOCodeDetails")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class DataSet {
+public class ISOCode {
+
     @Id
-    private int id;
-    private String name;
-    private String description;
-    private Date creationDate;
+    private String code;
+
+    private List<ISOCodeDetails> details;
 }

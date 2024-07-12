@@ -1,3 +1,5 @@
+#TODO: Fix the Dockerfile to run the application in a container
+
 FROM ubuntu:latest
 LABEL authors="kntav"
 
