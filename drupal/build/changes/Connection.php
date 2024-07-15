@@ -198,7 +198,9 @@ class Connection extends DatabaseConnection implements SupportsTemporaryTablesIn
     }
     // Under high concurrency LAST_INSERTED_ID does not work properly.
     // Use OUTPUT.
+    // https://www.drupal.org/project/sqlsrv/issues/3432661
     return $this->queryDirect('INSERT INTO {sequences} OUTPUT (Inserted.[value]) DEFAULT VALUES')->fetchField();
+    $this->escapedTables = $connection_options['escapedTables'] ?? [];
   }
 
   /**

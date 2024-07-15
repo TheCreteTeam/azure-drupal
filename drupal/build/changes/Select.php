@@ -233,12 +233,9 @@ class Select extends QuerySelect {
         $table_string = $this->connection->escapeTable($table['table']);
         // https://www.drupal.org/project/sqlsrv/issues/3432661
         // Do not attempt prefixing cross database / schema queries and escaped tables.
-//        if (strpos($table_string, '.') === FALSE && strpos($table_string, '[') === FALSE) {
-//          $table_string = '{' . $table_string . '}';
-//        }
-          if (strpos($table_string, '.') === FALSE) {
-              $table_string = '{' . $table_string . '}';
-          }
+        if (strpos($table_string, '.') === FALSE && strpos($table_string, '[') === FALSE) {
+          $table_string = '{' . $table_string . '}';
+        }
       }
 
       // Don't use the AS keyword for table aliases, as some

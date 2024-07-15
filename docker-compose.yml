@@ -2,18 +2,19 @@ version: '3.1'
 services:
   drupal:
 #    image: drupal:10-apache
-    build:
-      context: drupal
-      dockerfile: Dockerfile
+#    build:
+#      context: drupal
+#      dockerfile: Dockerfile
+    image: drupal-base
     container_name: drupal-poc
     ports:
       - 35020:80
     environment:
-      DB_USERNAME: sa
+      DB_USERNAME: admin
       DB_DATABASE: drupal
       DB_PASSWORD: Jijikos1
       DB_HOST: host.docker.internal
-      DB_PORT: 1433
+      DB_PORT: 3306
       DB_NAME: drupal
       DB_TABLE_PREFIX: 'dr_'
     volumes:
@@ -26,21 +27,39 @@ services:
     # - ./drupal/drupal-sites:/var/www/html/sites
     # - ./drupal/config:/var/www/html/sites/default
     depends_on:
-      - sqlserver
+      - mysql
 
-  sqlserver:
-    image: 'mcr.microsoft.com/mssql/server:latest'
-    container_name: sqlserver
-    environment:
-      - 'ACCEPT_EULA=yes'
-#      - 'MSSQL_PID=express'
-      - 'MSSQL_SA_PASSWORD=Jijikos1'
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: always
     ports:
-      - '1433:1433'
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: jijikos
+      MYSQL_DATABASE: drupal
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: Jijikos1
     volumes:
-      - ./DB/mssql/data:/var/opt/mssql/data
-      - ./DB/mssql/log:/var/opt/mssql/log
-      - ./DB/mssql/secrets:/var/opt/mssql/secrets
+      - ./DB/mysql/logs:/var/log/mysql
+      - ./DB/mysql/data:/var/lib/mysql
+#      - ./mysql/custom-my.cnf:/etc/mysql/conf.d/custom-my.cnf
+  #        - ./DB/mysql/init:/docker-entrypoint-initdb.d
+  #        - ./DB/mysql/backup:/backup
+
+#  sqlserver:
+#    image: 'mcr.microsoft.com/mssql/server:latest'
+#    container_name: sqlserver
+#    environment:
+#      - 'ACCEPT_EULA=yes'
+##      - 'MSSQL_PID=express'
+#      - 'MSSQL_SA_PASSWORD=Jijikos1'
+#    ports:
+#      - '1433:1433'
+#    volumes:
+#      - ./DB/mssql/data:/var/opt/mssql/data
+#      - ./DB/mssql/log:/var/opt/mssql/log
+#      - ./DB/mssql/secrets:/var/opt/mssql/secrets
 
   postgres:
     image: postgres:16

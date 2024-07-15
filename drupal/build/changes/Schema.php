@@ -1213,17 +1213,14 @@ EOF
    *   Engine Version Number.
    */
   public function engineVersionNumber() {
-      $version = $this->EngineVersion();
-      $start = strpos($version['VERSION'], '.');
-      return intval(substr($version['VERSION'], 0, $start));
+    $version = $this->EngineVersion();
     // https://www.drupal.org/project/sqlsrv/issues/3432661
     // Check EDITION if it has 'SQL Azure' then return version more than 13.
 //     if (str_contains($version['EDITION'], 'SQL Azure')) {
 // log version
-//error_log('SQL Azure version: ' . $version['VERSION']);
-//      return 16;
+error_log('SQL Azure version: ' . $version['VERSION']);
+      return 16;
 //     }
-
 //     $start = strpos($version['VERSION'], '.');
 //     return intval(substr($version['VERSION'], 0, $start));
   }

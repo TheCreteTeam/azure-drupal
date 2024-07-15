@@ -27,9 +27,9 @@ RUN docker-php-ext-enable sqlsrv pdo_sqlsrv
 
 
 # Install Drupal driver for SQL Server
-WORKDIR /opt/drupal
-RUN composer require 'drupal/sqlsrv:^4.4'
-RUN composer require 'drupal/restui:^1.21'
+#WORKDIR /opt/drupal
+##RUN composer require 'drupal/sqlsrv:^4.4'
+
 
 # Fix Drupal driver for SQL Server issues: https://www.drupal.org/project/sqlsrv/issues/3456815
 COPY build/changes/Schema.php /opt/drupal/web/modules/contrib/sqlsrv/src/Driver/Database/sqlsrv/Schema.php
@@ -37,12 +37,60 @@ COPY build/changes/Schema.php /opt/drupal/web/modules/contrib/sqlsrv/src/Driver/
 COPY build/changes/Select.php /opt/drupal/web/modules/contrib/sqlsrv/src/Driver/Database/sqlsrv/Select.php
 COPY build/changes/Install/Tasks.php /opt/drupal/web/modules/contrib/sqlsrv/src/Driver/Database/sqlsrv/Install/Tasks.php
 
+
+#ssh
+COPY build/entrypoint.sh ./
+RUN chmod +x ./entrypoint.sh
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends supervisor\
+    && apt-get install -y --no-install-recommends dialog \
+    && apt-get install -y --no-install-recommends openssh-server \
+    && echo "root:Docker!" | chpasswd \
+    && chmod u+x ./entrypoint.sh
+COPY build/sshd_config /etc/ssh/
+
+
+
+
+# /usr/local/bin/docker-php-entrypoint: 9: exec: docker: not found
+RUN apt-get install -y --no-install-recommends docker.io
+
+COPY build/config/DigiCertGlobalRootG2.crt.pem /var/www/html/DigitalOcean-CA3.crt
+
+
+# Supervisord configuration file
+COPY build/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN mkdir -p /var/run/sshd
+#CMD ["/usr/sbin/sshd", "-D"]
+
+
+# Install Drupal driver for SQL Server
+WORKDIR /opt/drupal
+RUN composer require --dev drush/drush
+
+
+# Add drupal configuration for mssql via env vars
+COPY build/config/settings-mysql.php /var/www/html/sites/default/settings.php
+#RUN chmod 777 /var/www/html/sites/default/settings.php
+#make non writable
+RUN chmod 444 /var/www/html/sites/default/settings.php
+
 # Admin status report fixes
 RUN mkdir -p /var/www/html/sites/default/files/config_WxI8vmxYs9PqmeenmJT9W4FOaGlM4B-6Ytl0htct0-INmEDl-Q0YE9KAPzJNiJHd1m09Tsxi7A/sync
 RUN mkdir -p /var/www/html/sites/default/files
 # make writable
 RUN chmod -R 777 /var/www/html/sites/default/files
-# Add drupal configuration for mssql via env vars
-COPY build/config/settings-mssql.php /var/www/html/sites/default/settings.php
-RUN chmod 777 /var/www/html/sites/default/settings.php
-EXPOSE 80
+
+
+
+# Run supervisord
+#CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
+# WITHOUT SUPERVISORD
+#CMD ["./entrypoint.sh"]
+# CMD remains the same to start Apache
+#CMD ["apache2-foreground"]
+#ENTRYPOINT [ "./entrypoint.sh" ]
+
+EXPOSE 80 2222

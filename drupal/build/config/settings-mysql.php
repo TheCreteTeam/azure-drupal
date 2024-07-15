@@ -20,21 +20,24 @@ $database = mb_convert_encoding($_ENV['DB_DATABASE'], "UTF-8");
 $port = mb_convert_encoding($_ENV['DB_PORT'], "UTF-8");
 $prefix = mb_convert_encoding($_ENV['DB_TABLE_PREFIX'], "UTF-8");
 
-$databases['default']['default'] = array (
-  'database' => $database,
-  'username' => $username,
-  'password' => $password,
-  'prefix' => $prefix,
-  'host' => $host,
-  'port' => $port,
-  'schema' => 'dbo',
-  'cache_schema' => 0,
-  'autoload' => 'modules/contrib/sqlsrv/src/Driver/Database/sqlsrv/',
-  'encrypt' => '1',
-  'trust_server_certificate' => '1',
-  'multi_subnet_failover' => 0,
-  'driver' => 'sqlsrv',
-  'namespace' => 'Drupal\\sqlsrv\\Driver\\Database\\sqlsrv',
+$databases['default']['default'] = array(
+    'database' => $database,
+    'username' => $username,
+    'password' => $password,
+    'prefix' => $prefix,
+    'host' => $host,
+    'port' => $port,
+    'schema' => 'dbo',
+    'cache_schema' => 0,
+    'encrypt' => '1',
+    'trust_server_certificate' => '1',
+    'multi_subnet_failover' => 0,
+    'driver' => 'mysql',
+
+    'pdo' => [
+        PDO::MYSQL_ATTR_SSL_CA => '/var/www/html/DigiCertGlobalRootG2.crt.pem',
+        PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false
+    ],
 );
 $settings['config_sync_directory'] = 'sites/default/files/config_WxI8vmxYs9PqmeenmJT9W4FOaGlM4B-6Ytl0htct0-INmEDl-Q0YE9KAPzJNiJHd1m09Tsxi7A/sync';
 
