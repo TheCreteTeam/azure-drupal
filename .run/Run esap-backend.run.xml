@@ -1,0 +1,67 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run esap-backend" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="containerName" value="esap-backend" />
+        <option name="envVars">
+          <list>
+            <DockerEnvVarImpl>
+              <option name="name" value="REDIS_HOST" />
+              <option name="value" value="host.docker.internal" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="REDIS_PORT" />
+              <option name="value" value="6379" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SECURITY_JWT_EXPIRATION_TIME" />
+              <option name="value" value="3600000" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SECURITY_JWT_SECRET_KEY" />
+              <option name="value" value="6cd55a9a014b459a0de476e72bd366b318c69f1cd7bc7abae19c9b5596a6eb65" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SERVER_PORT" />
+              <option name="value" value="15800" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_APPLICATION_NAME" />
+              <option name="value" value="esap-backend" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATASOURCE_DRIVER_CLASS_NAME" />
+              <option name="value" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATASOURCE_PASSWORD" />
+              <option name="value" value="Rootmssql1" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATASOURCE_URL" />
+              <option name="value" value="jdbc:sqlserver://host.docker.internal:1433;databaseName=esap-local;encrypt=true;trustServerCertificate=true" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_DATASOURCE_USERNAME" />
+              <option name="value" value="SA" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_JPA_HIBERNATE_DDL_AUTO" />
+              <option name="value" value="update" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_JPA_HIBERNATE_NAMING_PHYSICAL_STRATEGY" />
+              <option name="value" value="org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT" />
+              <option name="value" value="org.hibernate.dialect.SQLServerDialect" />
+            </DockerEnvVarImpl>
+          </list>
+        </option>
+        <option name="sourceFilePath" value="esap-backend/Dockerfile" />
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>
