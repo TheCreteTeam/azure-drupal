@@ -31,21 +31,19 @@ services:
 
   esap-backend:
     container_name: esap-backend
-    build:
-      context: ESAP-Backend
-      dockerfile: Dockerfile
+    image: esap-backend
     ports:
-      - "8080:8080"
+      - "15800:15800"
     environment:
-      REDIS_HOST: host.docker.internal
+      REDIS_HOST: redis
       REDIS_PORT: 6379
       SECURITY_JWT_EXPIRATION_TIME: 3600000
       SECURITY_JWT_SECRET_KEY: 6cd55a9a014b459a0de476e72bd366b318c69f1cd7bc7abae19c9b5596a6eb65
       SERVER_PORT: 15800
       SPRING_APPLICATION_NAME: esap-backend
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.microsoft.sqlserver.jdbc.SQLServerDriver
-      SPRING_DATASOURCE_PASSWORD: Rootmssql1
-      SPRING_DATASOURCE_URL: jdbc:sqlserver://host:docker:internal:1433\;databaseName\=esap-local\;encrypt\=true\;trustServerCertificate\=true;
+      SPRING_DATASOURCE_PASSWORD: Jijikos1
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://host.docker.internal:1433;databaseName=esap-local;encrypt=true;trustServerCertificate=true;
       SPRING_DATASOURCE_USERNAME: SA
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_HIBERNATE_NAMING_PHYSICAL_STRATEGY: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -53,30 +51,22 @@ services:
     depends_on:
       - sqlserver
       - redis
-    restart: on-failure
+    networks:
+      - mynetwork
+#    restart: on-failure
 
   redis:
       image: redis/redis-stack:latest
       container_name: redis
       ports:
-      - "6379:6379"
+        - "6379:6379"
+        - "8001:8001"
       volumes:
-      - ./DB/redis/data:/data
-      - ./DB/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
-      command: redis-server /usr/local/etc/redis/redis.conf
-
-  sqlserver:
-    image: 'mcr.microsoft.com/mssql/server:latest'
-    container_name: sqlserver
-    environment:
-      - 'ACCEPT_EULA=yes'
-      - 'MSSQL_SA_PASSWORD=Rootmssql1'
-    ports:
-      - '1433:1433'
-    volumes:
-      - ./DB/mssql/data:/var/opt/mssql/data
-      - ./DB/mssql/log:/var/opt/mssql/log
-      - ./DB/mssql/secrets:/var/opt/mssql/secrets
+        - ./DB/redis/data:/data
+        - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+#      command: redis-server --bind 0.0.0.0 --protected-mode no
+      networks:
+        - mynetwork
 
   mysql:
     image: mysql
@@ -96,19 +86,19 @@ services:
   #        - ./DB/mysql/init:/docker-entrypoint-initdb.d
   #        - ./DB/mysql/backup:/backup
 
-#  sqlserver:
-#    image: 'mcr.microsoft.com/mssql/server:latest'
-#    container_name: sqlserver
-#    environment:
-#      - 'ACCEPT_EULA=yes'
-##      - 'MSSQL_PID=express'
-#      - 'MSSQL_SA_PASSWORD=Jijikos1'
-#    ports:
-#      - '1433:1433'
-#    volumes:
-#      - ./DB/mssql/data:/var/opt/mssql/data
-#      - ./DB/mssql/log:/var/opt/mssql/log
-#      - ./DB/mssql/secrets:/var/opt/mssql/secrets
+  sqlserver:
+    image: 'mcr.microsoft.com/mssql/server:latest'
+    container_name: sqlserver
+    environment:
+      - 'ACCEPT_EULA=yes'
+#      - 'MSSQL_PID=express'
+      - 'MSSQL_SA_PASSWORD=Jijikos1'
+    ports:
+      - '1433:1433'
+    volumes:
+      - ./DB/mssql/data:/var/opt/mssql/data
+      - ./DB/mssql/log:/var/opt/mssql/log
+      - ./DB/mssql/secrets:/var/opt/mssql/secrets
 
   postgres:
     image: postgres:16
@@ -162,3 +152,5 @@ volumes:
   drupal-sites:
   drupal-themes:
   db-data:
+networks:
+  mynetwork:
