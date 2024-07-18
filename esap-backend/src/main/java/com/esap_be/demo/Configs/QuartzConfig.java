@@ -24,7 +24,7 @@ public class QuartzConfig {
     public SimpleTriggerFactoryBean isoCodesTrigger(@Qualifier("saveIsoCodesJobDetails") JobDetail jobDetail) {
         SimpleTriggerFactoryBean trigger = new SimpleTriggerFactoryBean();
         trigger.setJobDetail(jobDetail);
-        trigger.setRepeatInterval(120000); // every 2 minutes
+        trigger.setRepeatInterval(180000); // every 2 minutes
         trigger.setRepeatCount(-1); // repeat indefinitely
         return trigger;
     }
@@ -42,7 +42,7 @@ public class QuartzConfig {
     public SimpleTriggerFactoryBean clearISOCodesCacheTrigger(@Qualifier("clearISOCodesCacheJobDetail") JobDetail clearCacheJobDetail) {
         SimpleTriggerFactoryBean trigger = new SimpleTriggerFactoryBean();
         trigger.setJobDetail(clearCacheJobDetail);
-        trigger.setRepeatInterval(90000); // every minute and a half
+        trigger.setRepeatInterval(120000); // every minute and a half
         trigger.setRepeatCount(-1); // repeat indefinitely
         return trigger;
     }

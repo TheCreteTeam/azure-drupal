@@ -39,7 +39,7 @@ services:
       REDIS_PORT: 6379
       SECURITY_JWT_EXPIRATION_TIME: 3600000
       SECURITY_JWT_SECRET_KEY: 6cd55a9a014b459a0de476e72bd366b318c69f1cd7bc7abae19c9b5596a6eb65
-      SERVER_PORT: 15800
+      SERVER_PORT: 80
       SPRING_APPLICATION_NAME: esap-backend
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.microsoft.sqlserver.jdbc.SQLServerDriver
       SPRING_DATASOURCE_PASSWORD: Jijikos1
@@ -91,7 +91,6 @@ services:
     container_name: sqlserver
     environment:
       - 'ACCEPT_EULA=yes'
-#      - 'MSSQL_PID=express'
       - 'MSSQL_SA_PASSWORD=Jijikos1'
     ports:
       - '1433:1433'

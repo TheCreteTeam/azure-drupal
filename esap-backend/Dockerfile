@@ -17,7 +17,8 @@ RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 FROM eclipse-temurin:21-jdk-alpine
 VOLUME /tmp
 
-EXPOSE 15800
+EXPOSE 15800 80
+
 
 COPY --from=build /app/target/esap-backend-0.0.1-SNAPSHOT.jar esap-backend.jar
 
