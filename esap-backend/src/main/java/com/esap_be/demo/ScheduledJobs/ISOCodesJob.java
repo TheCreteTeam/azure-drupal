@@ -13,15 +13,21 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class ISOCodesJob extends QuartzJobBean {
 
     private static final Logger logger = LoggerFactory.getLogger(ISOController.class);
@@ -34,9 +40,24 @@ public class ISOCodesJob extends QuartzJobBean {
         this.isoRepository = isoRepository;
     }
 
+    @Autowired
+    private StringRedisTemplate template;
+
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         logger.info("SchedulerJob::FetchAndSaveISOCodes - Start at {}", new Date());
+
+        ValueOperations<String, String> ops = this.template.opsForValue();
+        String key = "testkey";
+        if(!this.template.hasKey(key)){
+            ops.set(key, "Hello World");
+            logger.info("Add a key is done");
+        }
+
+        logger.info("Return the value from the cache: {}", ops.get(key));
+
+
+
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.getForEntity(getAllISOCodesURL, String.class);
 
@@ -51,11 +72,12 @@ public class ISOCodesJob extends QuartzJobBean {
             try {
                 Map<String, List<ISOCodeDetails>> isoDataMap =
                         objectMapper.readValue(response.getBody(), new TypeReference<Map<String, List<ISOCodeDetails>>>() {});
-
+                List<ISOCode> isoCodes = new ArrayList<>();
                 for (Map.Entry<String, List<ISOCodeDetails>> entry : isoDataMap.entrySet()) {
                     ISOCode isoCode = new ISOCode(entry.getKey(), entry.getValue());
-                    isoRepository.save(isoCode);
+                    isoCodes.add(isoCode);
                 }
+                isoRepository.saveAll(isoCodes);
                 logger.info("SchedulerJob::FetchAndSaveISOCodes - End at {}", new Date());
             } catch (JsonProcessingException e) {
                 logger.error("Failed to deserialize ISO codes.", e);

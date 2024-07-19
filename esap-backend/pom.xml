@@ -101,8 +101,30 @@
 			<artifactId>spring-boot-starter-quartz</artifactId>
 			<version>3.3.1</version>
 		</dependency>
-	</dependencies>
 
+		<!-- Azure -->
+		<dependency>
+			<groupId>com.azure.spring</groupId>
+			<artifactId>spring-cloud-azure-starter-data-redis-lettuce</artifactId>
+<!--			<version>5.14.0</version>-->
+		</dependency>
+		<dependency>
+			<groupId>com.azure.spring</groupId>
+			<artifactId>spring-cloud-azure-starter-redis</artifactId>
+			<version>4.19.0</version>
+		</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.azure.spring</groupId>
+				<artifactId>spring-cloud-azure-dependencies</artifactId>
+				<version>5.14.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<build>
 		<plugins>
 			<plugin>
