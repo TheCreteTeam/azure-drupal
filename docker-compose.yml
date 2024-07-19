@@ -33,10 +33,13 @@ services:
     container_name: esap-backend
     image: esap-backend
     ports:
-      - "15800:15800"
+      - "15800:80"
+      - "15801:2222"
     environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
+      REDIS_HOST: esap-webportal.redis.cache.windows.net
+      REDIS_PORT: 6380
+      REDIS_SSL_ENABLED: true
+      REDIS_PASSWORD: wMyc3VO8SlO1QOnfajVmljjvh5LhJ56dgAzCaFrtj4I=
       SECURITY_JWT_EXPIRATION_TIME: 3600000
       SECURITY_JWT_SECRET_KEY: 6cd55a9a014b459a0de476e72bd366b318c69f1cd7bc7abae19c9b5596a6eb65
       SERVER_PORT: 80
@@ -48,12 +51,6 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_HIBERNATE_NAMING_PHYSICAL_STRATEGY: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.SQLServerDialect
-    depends_on:
-      - sqlserver
-      - redis
-    networks:
-      - mynetwork
-#    restart: on-failure
 
   redis:
       image: redis/redis-stack:latest
@@ -65,8 +62,6 @@ services:
         - ./DB/redis/data:/data
         - ./config/redis.conf:/usr/local/etc/redis/redis.conf
 #      command: redis-server --bind 0.0.0.0 --protected-mode no
-      networks:
-        - mynetwork
 
   mysql:
     image: mysql
@@ -151,5 +146,3 @@ volumes:
   drupal-sites:
   drupal-themes:
   db-data:
-networks:
-  mynetwork:
