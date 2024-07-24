@@ -26,9 +26,9 @@ RUN apk add openssh \
     && echo "root:Docker!" | chpasswd \
 #    && chmod +x entrypoint.sh \
     && cd /etc/ssh/ \
-    && ssh-keygen -A \
-    && apk add openrc
-RUN rc-update add sshd
+    && ssh-keygen -A
+#    && apk add openrc
+# RUN rc-update add sshd
 
 #ENTRYPOINT [ "entrypoint.sh" ]
 EXPOSE 2222
@@ -45,5 +45,5 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 # Run supervisord
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]
 
-ENTRYPOINT ["java","-jar","esap-backend.jar"]
+#ENTRYPOINT ["java","-jar","esap-backend.jar"]
 EXPOSE 80 2222
